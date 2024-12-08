@@ -14,6 +14,8 @@ public class TankMovement : MonoBehaviour
     private float horizontal,
                 vertical;
 
+    public bool bIsMovingFwd;
+
     // GO Components
     Rigidbody rb;
     AudioSource audioSource;
@@ -26,6 +28,9 @@ public class TankMovement : MonoBehaviour
     void Update()
     {
         InputPlayer();
+        AudioEngine();
+
+        bIsMovingFwd = vertical>0;
     }
 
     void FixedUpdate()
@@ -48,9 +53,26 @@ public class TankMovement : MonoBehaviour
     {
         // Calcule how many grades I want to turn the tank
         float turn = horizontal * turnSpeed * Time.fixedDeltaTime;
-        // Gets a Quaternion in func. of an specific amount of degrees on the X,Y and Z axis
-        Quaternion turnRotation = Quaternion.Euler(0, turn, 0);
 
+        // Gets a Quaternion in func. of an specific amount of degrees on the X,Y and Z axis
+        Quaternion turnRotation = Quaternion.Euler(0, turn, 0);        
+
+        // Rotates the Rigidbody to a specific rotation (current quaternion + calculated quaternion)
         rb.MoveRotation(transform.rotation * turnRotation);       
+    }
+    void AudioEngine()
+    {
+        if (vertical != 0 || horizontal != 0)       // The tank is moving or rotating        
+        {
+            if (audioSource.clip != drivingClip)
+                audioSource.clip = drivingClip; 
+        }
+        else                                        // The tank is stopped               
+        {   
+            if (audioSource.clip != idleClip)
+                audioSource.clip = idleClip;
+        }                                
+        if (!audioSource.isPlaying)
+            audioSource.Play();
     }
 }
