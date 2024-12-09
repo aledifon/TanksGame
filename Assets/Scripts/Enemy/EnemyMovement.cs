@@ -20,5 +20,6 @@ public class EnemyMovement : MonoBehaviour
             return;
         else
             agent.SetDestination(player.transform.position);
+            
     }
 }
