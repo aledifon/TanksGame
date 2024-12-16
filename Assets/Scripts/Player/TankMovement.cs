@@ -20,10 +20,14 @@ public class TankMovement : MonoBehaviour
     Rigidbody rb;
     AudioSource audioSource;
 
+    GameManager gameManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = rb.GetComponent<AudioSource>();
+
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
     void Update()
     {
@@ -62,17 +66,22 @@ public class TankMovement : MonoBehaviour
     }
     void AudioEngine()
     {
-        if (vertical != 0 || horizontal != 0)       // The tank is moving or rotating        
+        if (!gameManager.gameOver && !gameManager.victory)
         {
-            if (audioSource.clip != drivingClip)
-                audioSource.clip = drivingClip; 
+            if (vertical != 0 || horizontal != 0)       // The tank is moving or rotating        
+            {
+                if (audioSource.clip != drivingClip)
+                    audioSource.clip = drivingClip;
+            }
+            else                                        // The tank is stopped               
+            {
+                if (audioSource.clip != idleClip)
+                    audioSource.clip = idleClip;
+            }
+            if (!audioSource.isPlaying)
+                audioSource.Play();
         }
-        else                                        // The tank is stopped               
-        {   
-            if (audioSource.clip != idleClip)
-                audioSource.clip = idleClip;
-        }                                
-        if (!audioSource.isPlaying)
-            audioSource.Play();
+        else
+            audioSource.Stop();
     }
 }

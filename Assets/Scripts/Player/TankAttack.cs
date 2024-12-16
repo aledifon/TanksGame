@@ -11,14 +11,19 @@ public class TankAttack : MonoBehaviour
     [SerializeField] AudioSource audioSource;   // Ref. to the audioSource component which brings the posShell object        
 
     TankMovement tankMovement;
+
+    GameManager gameManager;
+
     void Start()
     {        
         tankMovement = GetComponent<TankMovement>();
+
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
     
     void Update()
     {        
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !gameManager.gameOver && !gameManager.victory)
             Launch();
     }
 

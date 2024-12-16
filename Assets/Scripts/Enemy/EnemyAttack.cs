@@ -22,10 +22,17 @@ public class EnemyAttack : MonoBehaviour
 
     private float timer;                            // Cadence shooting timer
 
+    GameManager gameManager;
+
     //TankMovement tankMovement;
     void Start()
     {
         //tankMovement = GetComponent<TankMovement>();
+    }
+
+    private void Awake()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void FixedUpdate()
@@ -35,8 +42,9 @@ public class EnemyAttack : MonoBehaviour
         if (timer >= timeBetweenAttacks && IPlayerDetected())
         {
             timer = 0;
-            // if (RayCast Detected & Cadence shooting time elapsed)
-            LaunchBullet();            
+            // if (RayCast Detected & Cadence shooting time elapsed & No Game Over detected)
+            if (!gameManager.gameOver && !gameManager.victory)
+                LaunchBullet();            
         }
 
         // if (RayCast Detected)

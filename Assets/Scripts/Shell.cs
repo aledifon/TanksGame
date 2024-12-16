@@ -5,6 +5,7 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     [SerializeField] ParticleSystem explosionShell; // Ref. to the particle system of the bullet's child
+    public int damageShell;
 
     // GO components
     AudioSource audioSource;
